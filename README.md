@@ -2,6 +2,7 @@
 
 
 # CoolPress Project
+Hey, It's **Nikolai**
 
 CoolPress is an application to show the power of web development using Django
 
