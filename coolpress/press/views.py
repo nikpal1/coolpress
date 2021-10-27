@@ -1,12 +1,14 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
 from django.urls import reverse
-from press.models import Post, PostStatus
+from django.views.generic import TemplateView, DetailView, ListView, CreateView, UpdateView
 
-from press.forms import PostForm
+from press.models import Post, PostStatus, Category
+
+from press.forms import PostForm, CategoryForm
 
 
 def index(request):
@@ -61,3 +63,45 @@ def post_update(request, post_id=None):
         form = PostForm(instance=post)
 
     return render(request, 'posts_update.html', {'form': form})
+
+
+class AboutView(TemplateView):
+    template_name = "about.html"
+
+
+class CategoryDetail(DetailView):
+    model = Category
+
+
+class CategoryList(ListView):
+    model = Category
+
+
+class CategoryAdd(CreateView):
+    model = Category
+    form_class = CategoryForm
+
+
+class CategoryUpdate(UpdateView):
+    model = Category
+    form_class = CategoryForm
+
+
+class PostList(ListView):
+    model = Post
+    paginate_by = 10
+    context_object_name = 'post_list'
+    template_name = 'posts_list.html'
+
+    def get_queryset(self):
+        queryset = super(PostList, self).get_queryset()
+        category_slug = self.kwargs['category_slug']
+        category = get_object_or_404(Category, slug=category_slug)
+        return  queryset.filter(category=category)
+
+
+def category_api(request, slug):
+    cat = get_object_or_404(Category, slug=slug)
+    return JsonResponse(
+        dict(slug=cat.slug, label=cat.label)
+    )

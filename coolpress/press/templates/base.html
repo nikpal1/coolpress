@@ -15,10 +15,17 @@
 
 </head>
 <body>
+
+
 <div class="container">
     {% include 'navbar.html' %}
     {% block content %}
     {% endblock %}
 </div>
+
+{% include 'pagination.html' %}
+{% include 'footer.html' %}
+
 </body>
+
 </html>
