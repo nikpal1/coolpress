@@ -69,6 +69,3 @@ class CreatePostUsingForm(TestCase):
         self.assertTrue(is_logged_in)
         response = self.client.get(update_juans_post)
         self.assertEqual(response.status_code, 400)
-
-class ClassTester(TestCase):
-    @classmethod
