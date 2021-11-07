@@ -4,7 +4,6 @@ from dataclasses import dataclass
 import numpy as np
 from django.db.models import QuerySet
 
-from wordcloud import WordCloud, STOPWORDS
 from press.models import Post
 
 
@@ -28,37 +27,6 @@ class StatsDict(dict):
     def from_msg(cls, msg: str):
         tokens = msg.casefold().split(' ')
         return cls(**Counter(tokens))
-
-
-    def weighted_dict(self):
-        new_dict = {}
-        for word, cnt in self.items():
-            if word not in STOPWORDS:
-                new_weight = len(word) * cnt
-                new_word = word.replace(',', '')
-                new_dict[new_word] = new_weight
-        return StatsDict(**new_dict)
-
-    def get_word_cloud(self, limit=10):
-        x, y = np.ogrid[:300, :300]
-
-        mask = (x - 150) ** 2 + (y - 150) ** 2 > 130 ** 2
-        mask = 255 * mask.astype(int)
-
-        wc = WordCloud(background_color='white', mask=mask)
-        weighted_dict = self.weighted_dict()
-        top_values = self._get_top(weighted_dict, limit)
-        wc.fit_words(top_values)
-        return wc
-
-    def to_file(self, file_path, limit=10):
-        wc = self.get_word_cloud(limit)
-        wc.to_file(file_path)
-        return file_path
-
-    def to_svg(self, limit=10):
-        wc = self.get_word_cloud(limit)
-        return wc.to_svg()
 
 @dataclass
 class Stats:

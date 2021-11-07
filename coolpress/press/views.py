@@ -111,6 +111,7 @@ class PostList(ListView):
         return queryset.filter(category=category)
 
 
+
 class PostFilteredByText(PostList):
     def get_queryset(self):
         queryset = super(PostList, self).get_queryset()

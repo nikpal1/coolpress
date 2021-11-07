@@ -3,4 +3,3 @@ gunicorn
 django-heroku
 libgravatar
 beautifulsoup4
-wordcloud

@@ -6,7 +6,6 @@
 <ul>
     <li>Slug: {{object.slug}}</li>
     <li>Number of posts: {{object.post_set.count}}</li>
-    <li>Number of posts: {{object.post_set.count}}</li>
 </ul>
 {% for post in object.post_set.all %}
     {% include 'post_card.html' %}
